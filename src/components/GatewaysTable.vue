@@ -8,6 +8,8 @@
 </template>
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
+import { getGateways } from "../composables/api";
+import { GatewaysTableDataType } from "./GatewayTableTypes";
 import { Table } from "ant-design-vue";
 import "ant-design-vue/lib/table/style/css";
 
@@ -17,7 +19,7 @@ export default defineComponent({
     Table,
   },
   setup() {
-    const data = reactive({
+    const data: GatewaysTableDataType = reactive({
       columns: [
         {
           title: "Serial Number",
@@ -37,6 +39,14 @@ export default defineComponent({
       ],
       gateways: [],
     });
+
+    getGateways()
+      .then((gateways: Gateway[]) => {
+        data.gateways = gateways;
+      })
+      .catch((error) => {
+        console.error("error: ", error);
+      });
     return {
       ...toRefs(data),
     };
