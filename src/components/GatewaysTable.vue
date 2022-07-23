@@ -30,9 +30,11 @@ import { Gateway } from "../types";
 import { Table } from "ant-design-vue";
 import { Popconfirm } from "ant-design-vue";
 import { Button } from "ant-design-vue";
+import { notification } from "ant-design-vue";
 import { DeleteOutlined } from "@ant-design/icons-vue";
 import "ant-design-vue/lib/table/style/css";
 import "ant-design-vue/lib/popconfirm/style/css";
+import "ant-design-vue/lib/notification/style/css";
 
 export default defineComponent({
   name: "GatewaysTable",
@@ -73,6 +75,7 @@ export default defineComponent({
       try {
         data.isLoading = true;
         await deleteGateway(gateway._id);
+        openNotificationWithIcon("success", "Gateway succesfully deleted");
         await refreshGateways();
       } catch (error) {
         console.log("Error while deleting gateway: ", error);
@@ -92,6 +95,21 @@ export default defineComponent({
       }
     };
 
+    const openNotificationWithIcon = (
+      type: "success" | "error" | "warning",
+      message: string,
+      description: string = ""
+    ) => {
+      const options = {
+        message,
+        description,
+      };
+      type === "success"
+        ? notification.success(options)
+        : type === "warning"
+        ? notification.warning(options)
+        : notification.error(options);
+    };
     refreshGateways();
 
     return {
