@@ -1,24 +1,46 @@
 <template>
-  <Table
+  <a-table
     :columns="columns"
     :data-source="gateways"
     :pagination="false"
     :loading="isLoading"
     align="center"
-  ></Table>
+  >
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'actions'">
+        <a-popconfirm
+          title="Are you sure you want to delete this gateway?"
+          okType="danger"
+          @confirm="onDeleteGateway(record)"
+        >
+          <a-button type="danger" shape="circle">
+            <template #icon><DeleteOutlined /></template>
+          </a-button>
+        </a-popconfirm>
+      </template>
+    </template>
+  </a-table>
 </template>
+
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
-import { getGateways } from "../composables/api";
+import { getGateways, deleteGateway } from "../composables/api";
 import { GatewaysTableDataType } from "./GatewayTableTypes";
 import { Gateway } from "../types";
 import { Table } from "ant-design-vue";
+import { Popconfirm } from "ant-design-vue";
+import { Button } from "ant-design-vue";
+import { DeleteOutlined } from "@ant-design/icons-vue";
 import "ant-design-vue/lib/table/style/css";
+import "ant-design-vue/lib/popconfirm/style/css";
 
 export default defineComponent({
   name: "GatewaysTable",
   components: {
-    Table,
+    ATable: Table,
+    AButton: Button,
+    DeleteOutlined,
+    APopconfirm: Popconfirm,
   },
   setup() {
     const data: GatewaysTableDataType = reactive({
@@ -47,16 +69,34 @@ export default defineComponent({
       isLoading: true,
     });
 
-    getGateways()
-      .then((gateways: Gateway[]) => {
-        data.gateways = gateways;
+    const onDeleteGateway = async (gateway: Gateway) => {
+      try {
+        data.isLoading = true;
+        await deleteGateway(gateway._id);
+        await refreshGateways();
+      } catch (error) {
+        console.log("Error while deleting gateway: ", error);
+      } finally {
         data.isLoading = false;
-      })
-      .catch((error) => {
-        console.error("error: ", error);
-      });
+      }
+    };
+
+    const refreshGateways = async () => {
+      try {
+        data.isLoading = true;
+        data.gateways = await getGateways();
+      } catch (error) {
+        console.log("Error while getting gateways");
+      } finally {
+        data.isLoading = false;
+      }
+    };
+
+    refreshGateways();
+
     return {
       ...toRefs(data),
+      onDeleteGateway,
     };
   },
 });
