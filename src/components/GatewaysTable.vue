@@ -3,6 +3,7 @@
     :columns="columns"
     :data-source="gateways"
     :pagination="false"
+    :loading="isLoading"
     align="center"
   ></Table>
 </template>
@@ -10,6 +11,7 @@
 import { defineComponent, reactive, toRefs } from "vue";
 import { getGateways } from "../composables/api";
 import { GatewaysTableDataType } from "./GatewayTableTypes";
+import { Gateway } from "../types";
 import { Table } from "ant-design-vue";
 import "ant-design-vue/lib/table/style/css";
 
@@ -36,13 +38,19 @@ export default defineComponent({
           dataIndex: "address",
           key: "address",
         },
+        {
+          title: "Actions",
+          key: "actions",
+        },
       ],
       gateways: [],
+      isLoading: true,
     });
 
     getGateways()
       .then((gateways: Gateway[]) => {
         data.gateways = gateways;
+        data.isLoading = false;
       })
       .catch((error) => {
         console.error("error: ", error);
