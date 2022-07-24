@@ -6,6 +6,11 @@
     :loading="isLoading"
     align="center"
   >
+    <template #expandedRowRender="{ record }">
+      <p style="margin: 0">
+        This record has {{ record.peripherals.length }} peripherals
+      </p>
+    </template>
     <template #headerCell="{ column }">
       <template v-if="column.key === 'actions'">
         <a-button
@@ -49,10 +54,6 @@
     @close="createGatewayModalVisibility = false"
     @success="gatewayCreated"
   />
-  <peripherals-modal
-    :isVisible="peripheralsModalVisibility"
-    @close="peripheralsModalVisibility = false"
-  />
 </template>
 
 <script lang="ts">
@@ -62,7 +63,6 @@ import { GatewaysTableDataType } from "@/types/components";
 import { Gateway } from "../types";
 import { openNotificationWithIcon } from "@/composables/utils";
 import CreateGatewayModal from "./CreateGatewayModal.vue";
-import PeripheralsModal from "./PeripheralsModal.vue";
 
 import { Table, Popconfirm, Button } from "ant-design-vue";
 import {
@@ -81,7 +81,6 @@ export default defineComponent({
     DeleteOutlined,
     APopconfirm: Popconfirm,
     CreateGatewayModal,
-    PeripheralsModal,
     PlusOutlined,
     ClusterOutlined,
   },

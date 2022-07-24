@@ -3,6 +3,7 @@ export type Gateway = {
   label: string;
   address: string;
   _id: string;
+  peripherals: Peripheral[];
 };
 
 export type Peripheral = {
@@ -11,4 +12,5 @@ export type Peripheral = {
   createdAt: Date;
   status: boolean;
   _id: string;
+  gateway: string;
 };
