@@ -10,7 +10,6 @@ export type GatewaysTableDataType = {
 
 export type PeipheralsTableDataType = {
   columns: any[];
-  peripherals: any[];
   isLoading: boolean;
   createPeripheralModalVisibility: boolean;
 };

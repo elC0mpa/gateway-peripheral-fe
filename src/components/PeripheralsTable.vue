@@ -4,6 +4,9 @@
     :data-source="peripherals"
     :pagination="false"
     :loading="isLoading"
+    :scroll="{
+      x: 700,
+    }"
   >
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'actions'">
@@ -80,6 +83,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ["refresh"],
   setup(props, ctx) {
     const data: PeipheralsTableDataType = reactive({
       columns: [
@@ -108,7 +112,6 @@ export default defineComponent({
           key: "actions",
         },
       ],
-      peripherals: props.peripherals,
       isLoading: false,
       createPeripheralModalVisibility: false,
     });

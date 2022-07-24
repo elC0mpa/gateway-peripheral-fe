@@ -4,11 +4,15 @@
     :data-source="gateways"
     :pagination="false"
     :loading="isLoading"
+    :scroll="{
+      x: 700,
+    }"
   >
     <template #expandedRowRender="{ record }">
       <peripherals-table
         :gatewayId="record._id"
         :peripherals="record.peripherals"
+        @refresh="refreshGateways"
       />
     </template>
     <template #headerCell="{ column }">
