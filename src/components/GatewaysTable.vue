@@ -19,7 +19,11 @@
     </template>
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'actions'">
-        <a-button type="primary" shape="circle">
+        <a-button
+          type="primary"
+          shape="circle"
+          @click="peripheralsModalVisibility = true"
+        >
           <template #icon><ClusterOutlined /></template>
         </a-button>
         <a-popconfirm
@@ -45,6 +49,10 @@
     @close="createGatewayModalVisibility = false"
     @success="gatewayCreated"
   />
+  <peripherals-modal
+    :isVisible="peripheralsModalVisibility"
+    @close="peripheralsModalVisibility = false"
+  />
 </template>
 
 <script lang="ts">
@@ -54,6 +62,7 @@ import { GatewaysTableDataType } from "@/types/components";
 import { Gateway } from "../types";
 import { openNotificationWithIcon } from "@/composables/utils";
 import CreateGatewayModal from "./CreateGatewayModal.vue";
+import PeripheralsModal from "./PeripheralsModal.vue";
 
 import { Table, Popconfirm, Button } from "ant-design-vue";
 import {
@@ -72,6 +81,7 @@ export default defineComponent({
     DeleteOutlined,
     APopconfirm: Popconfirm,
     CreateGatewayModal,
+    PeripheralsModal,
     PlusOutlined,
     ClusterOutlined,
   },
@@ -101,6 +111,7 @@ export default defineComponent({
       gateways: [],
       isLoading: true,
       createGatewayModalVisibility: false,
+      peripheralsModalVisibility: false,
     });
 
     const onDeleteGateway = async (gateway: Gateway) => {
