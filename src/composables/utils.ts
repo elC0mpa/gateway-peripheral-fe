@@ -29,3 +29,10 @@ export const getErrorMessage = (error: any): string => {
   }
   return errorMsgs.join("\n");
 };
+
+export const formatDate = (strDate: string) => {
+  const date = new Date(strDate);
+  return `${date.getDate()}/${
+    date.getMonth() + 1
+  }/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+};

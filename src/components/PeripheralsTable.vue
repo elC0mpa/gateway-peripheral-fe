@@ -9,6 +9,9 @@
     }"
   >
     <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'createdAt'">
+        {{ formatDate(record.createdAt) }}
+      </template>
       <template v-if="column.key === 'actions'">
         <a-popconfirm
           title="Are you sure you want to delete this peripheral?"
@@ -25,6 +28,7 @@
           v-model:checked="record.status"
           checked-children="ON"
           un-checked-children="OFF"
+          :disabled="true"
         />
       </template>
     </template>
@@ -51,6 +55,7 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
 import { deletePeripheral } from "../composables/api";
+import { formatDate } from "@/composables/utils";
 import { PeipheralsTableDataType } from "@/types/components";
 import { openNotificationWithIcon } from "@/composables/utils";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons-vue";
@@ -139,6 +144,7 @@ export default defineComponent({
       props,
       peripheralCreated,
       onDeletePeripheral,
+      formatDate,
     };
   },
 });
