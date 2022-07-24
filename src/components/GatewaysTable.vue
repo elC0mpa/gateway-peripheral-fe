@@ -30,6 +30,12 @@
         </a-popconfirm>
       </template>
     </template>
+    <template #emptyText>
+      <p>No gateway created yet</p>
+      <a-button type="primary" @click="createGatewayModalVisibility = true"
+        >Create gateway</a-button
+      >
+    </template>
   </a-table>
   <create-gateway-modal
     :isVisible="createGatewayModalVisibility"
