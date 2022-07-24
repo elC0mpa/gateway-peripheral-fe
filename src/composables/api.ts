@@ -30,3 +30,26 @@ export const deleteGateway = (id: string): Promise<Gateway> => {
       });
   });
 };
+
+export const createGateway = (
+  serialNumber: string,
+  address: string,
+  label: string
+): Promise<Gateway> => {
+  return new Promise((resolve, reject) => {
+    instance
+      .post("gateway/", {
+        serialNumber,
+        address,
+        label,
+      })
+      .then((response) => {
+        const { data } = response;
+        const { items } = data;
+        resolve(items);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};

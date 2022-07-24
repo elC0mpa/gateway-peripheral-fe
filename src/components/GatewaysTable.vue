@@ -6,6 +6,17 @@
     :loading="isLoading"
     align="center"
   >
+    <template #headerCell="{ column }">
+      <template v-if="column.key === 'actions'">
+        <a-button
+          type="primary"
+          shape="circle"
+          @click="createGatewayModalVisibility = true"
+          ><template #icon><PlusOutlined /></template>
+        </a-button>
+        {{ column.title }}
+      </template>
+    </template>
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'actions'">
         <a-popconfirm
@@ -20,21 +31,25 @@
       </template>
     </template>
   </a-table>
+  <create-gateway-modal
+    :isVisible="createGatewayModalVisibility"
+    @close="createGatewayModalVisibility = false"
+    @success="gatewayCreated"
+  />
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
 import { getGateways, deleteGateway } from "../composables/api";
-import { GatewaysTableDataType } from "./GatewayTableTypes";
+import { GatewaysTableDataType } from "@/types/components";
 import { Gateway } from "../types";
-import { Table } from "ant-design-vue";
-import { Popconfirm } from "ant-design-vue";
-import { Button } from "ant-design-vue";
-import { notification } from "ant-design-vue";
-import { DeleteOutlined } from "@ant-design/icons-vue";
+import { openNotificationWithIcon } from "@/composables/utils";
+import CreateGatewayModal from "./CreateGatewayModal.vue";
+
+import { Table, Popconfirm, Button } from "ant-design-vue";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import "ant-design-vue/lib/table/style/css";
 import "ant-design-vue/lib/popconfirm/style/css";
-import "ant-design-vue/lib/notification/style/css";
 
 export default defineComponent({
   name: "GatewaysTable",
@@ -43,6 +58,8 @@ export default defineComponent({
     AButton: Button,
     DeleteOutlined,
     APopconfirm: Popconfirm,
+    CreateGatewayModal,
+    PlusOutlined,
   },
   setup() {
     const data: GatewaysTableDataType = reactive({
@@ -69,6 +86,7 @@ export default defineComponent({
       ],
       gateways: [],
       isLoading: true,
+      createGatewayModalVisibility: false,
     });
 
     const onDeleteGateway = async (gateway: Gateway) => {
@@ -95,28 +113,30 @@ export default defineComponent({
       }
     };
 
-    const openNotificationWithIcon = (
-      type: "success" | "error" | "warning",
-      message: string,
-      description: string = ""
-    ) => {
-      const options = {
-        message,
-        description,
-      };
-      type === "success"
-        ? notification.success(options)
-        : type === "warning"
-        ? notification.warning(options)
-        : notification.error(options);
+    const gatewayCreated = async () => {
+      data.createGatewayModalVisibility = false;
+      await refreshGateways();
     };
+
     refreshGateways();
 
     return {
       ...toRefs(data),
       onDeleteGateway,
+      gatewayCreated,
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.gateway-crud {
+  display: flex;
+  flex-direction: column;
+  &__create-button {
+    margin-bottom: 15px;
+    align-self: flex-end;
+  }
+}
+</style>
 
