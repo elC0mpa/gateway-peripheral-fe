@@ -11,7 +11,11 @@ export const getGateways = (): Promise<Gateway[]> => {
         resolve(items);
       })
       .catch((error) => {
-        reject(error);
+        if (error.response) {
+          reject(error.response.data);
+        } else if (error.request) {
+          reject(error.request);
+        }
       });
   });
 };
@@ -26,7 +30,11 @@ export const deleteGateway = (id: string): Promise<Gateway> => {
         resolve(items);
       })
       .catch((error) => {
-        reject(error);
+        if (error.response) {
+          reject(error.response.data);
+        } else if (error.request) {
+          reject(error.request);
+        }
       });
   });
 };
@@ -49,7 +57,11 @@ export const createGateway = (
         resolve(items);
       })
       .catch((error) => {
-        reject(error);
+        if (error.response) {
+          reject(error.response.data);
+        } else if (error.request) {
+          reject(error.request);
+        }
       });
   });
 };

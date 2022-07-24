@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
 import { CreateGatewayModalType } from "@/types/components";
-import { openNotificationWithIcon } from "@/composables/utils";
+import { openNotificationWithIcon, getErrorMessage } from "@/composables/utils";
 import { createGateway } from "@/composables/api";
 import { Modal, Input } from "ant-design-vue";
 import "ant-design-vue/lib/modal/style/css";
@@ -65,7 +65,12 @@ export default defineComponent({
         data.address = "";
         ctx.emit("success");
       } catch (error) {
-        console.log("Error while creating the gateway: ", error);
+        const message = getErrorMessage(error);
+        openNotificationWithIcon(
+          "error",
+          "Gateway couldn´t be created",
+          message
+        );
       } finally {
         data.isLoading = false;
       }
