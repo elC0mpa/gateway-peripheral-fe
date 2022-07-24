@@ -19,6 +19,9 @@
     </template>
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'actions'">
+        <a-button type="primary" shape="circle">
+          <template #icon><ClusterOutlined /></template>
+        </a-button>
         <a-popconfirm
           title="Are you sure you want to delete this gateway?"
           okType="danger"
@@ -53,7 +56,11 @@ import { openNotificationWithIcon } from "@/composables/utils";
 import CreateGatewayModal from "./CreateGatewayModal.vue";
 
 import { Table, Popconfirm, Button } from "ant-design-vue";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons-vue";
+import {
+  DeleteOutlined,
+  PlusOutlined,
+  ClusterOutlined,
+} from "@ant-design/icons-vue";
 import "ant-design-vue/lib/table/style/css";
 import "ant-design-vue/lib/popconfirm/style/css";
 
@@ -66,6 +73,7 @@ export default defineComponent({
     APopconfirm: Popconfirm,
     CreateGatewayModal,
     PlusOutlined,
+    ClusterOutlined,
   },
   setup() {
     const data: GatewaysTableDataType = reactive({
@@ -134,15 +142,4 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.gateway-crud {
-  display: flex;
-  flex-direction: column;
-  &__create-button {
-    margin-bottom: 15px;
-    align-self: flex-end;
-  }
-}
-</style>
 
