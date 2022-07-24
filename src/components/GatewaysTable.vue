@@ -4,12 +4,12 @@
     :data-source="gateways"
     :pagination="false"
     :loading="isLoading"
-    align="center"
   >
     <template #expandedRowRender="{ record }">
-      <p style="margin: 0">
-        This record has {{ record.peripherals.length }} peripherals
-      </p>
+      <peripherals-table
+        :gatewayId="record._id"
+        :peripherals="record.peripherals"
+      />
     </template>
     <template #headerCell="{ column }">
       <template v-if="column.key === 'actions'">
@@ -24,13 +24,6 @@
     </template>
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'actions'">
-        <a-button
-          type="primary"
-          shape="circle"
-          @click="peripheralsModalVisibility = true"
-        >
-          <template #icon><ClusterOutlined /></template>
-        </a-button>
         <a-popconfirm
           title="Are you sure you want to delete this gateway?"
           okType="danger"
@@ -63,13 +56,10 @@ import { GatewaysTableDataType } from "@/types/components";
 import { Gateway } from "../types";
 import { openNotificationWithIcon } from "@/composables/utils";
 import CreateGatewayModal from "./CreateGatewayModal.vue";
+import PeripheralsTable from "./PeripheralsTable.vue";
 
 import { Table, Popconfirm, Button } from "ant-design-vue";
-import {
-  DeleteOutlined,
-  PlusOutlined,
-  ClusterOutlined,
-} from "@ant-design/icons-vue";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import "ant-design-vue/lib/table/style/css";
 import "ant-design-vue/lib/popconfirm/style/css";
 
@@ -80,9 +70,9 @@ export default defineComponent({
     AButton: Button,
     DeleteOutlined,
     APopconfirm: Popconfirm,
+    PeripheralsTable,
     CreateGatewayModal,
     PlusOutlined,
-    ClusterOutlined,
   },
   setup() {
     const data: GatewaysTableDataType = reactive({
@@ -148,6 +138,7 @@ export default defineComponent({
       ...toRefs(data),
       onDeleteGateway,
       gatewayCreated,
+      refreshGateways,
     };
   },
 });

@@ -8,6 +8,13 @@ export type GatewaysTableDataType = {
   peripheralsModalVisibility: boolean;
 };
 
+export type PeipheralsTableDataType = {
+  columns: any[];
+  peripherals: any[];
+  isLoading: boolean;
+  createPeripheralModalVisibility: boolean;
+};
+
 export type CreateGatewayModalType = {
   uniqueSerialNumber: string;
   label: string;
@@ -15,8 +22,9 @@ export type CreateGatewayModalType = {
   isLoading: boolean;
 };
 
-export type PeripheralsModalType = {
-  peripherals: Peripheral[];
-  columns: any[];
+export type CreatePeripheralModalType = {
+  vendor: string;
+  uid: number;
+  status: boolean;
   isLoading: boolean;
 };

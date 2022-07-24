@@ -103,3 +103,32 @@ export const deletePeripheral = (id: string): Promise<Peripheral> => {
       });
   });
 };
+
+export const createPeripheral = (
+  gateway: string,
+  vendor: string,
+  uid: number,
+  status: boolean
+): Promise<Peripheral> => {
+  return new Promise((resolve, reject) => {
+    instance
+      .post("peripheral/", {
+        gateway,
+        vendor,
+        uid,
+        status,
+      })
+      .then((response) => {
+        const { data } = response;
+        const { items } = data;
+        resolve(items);
+      })
+      .catch((error) => {
+        if (error.response) {
+          reject(error.response.data);
+        } else if (error.request) {
+          reject(error.request);
+        }
+      });
+  });
+};

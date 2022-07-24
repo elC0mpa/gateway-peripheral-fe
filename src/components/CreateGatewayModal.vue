@@ -12,7 +12,9 @@
       placeholder="Serial Number"
       :allow-clear="true"
     />
+    <hr />
     <a-input v-model:value="label" placeholder="Label" :allow-clear="true" />
+    <hr />
     <a-input
       v-model:value="address"
       placeholder="IP Address"
