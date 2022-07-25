@@ -5,7 +5,7 @@
     :pagination="false"
     :loading="isLoading"
     :scroll="{
-      x: 700,
+      x: 600,
     }"
   >
     <template #expandedRowRender="{ record }">
