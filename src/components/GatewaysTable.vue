@@ -4,6 +4,7 @@
     :data-source="gateways"
     :pagination="false"
     :loading="isLoading"
+    rowKey="serialNumber"
     :scroll="{
       x: 600,
     }"
