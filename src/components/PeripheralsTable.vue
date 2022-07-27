@@ -43,6 +43,12 @@
         {{ column.title }}
       </template>
     </template>
+    <template #emptyText>
+      <p>No peripheral created yet</p>
+      <a-button type="primary" @click="createPeripheralModalVisibility = true"
+        >Create peripheral</a-button
+      >
+    </template>
   </a-table>
   <create-peripheral-modal
     :isVisible="createPeripheralModalVisibility"
