@@ -24,6 +24,7 @@
           v-model:value="data.vendor"
           placeholder="Vendor"
           :allow-clear="true"
+          :disabled="data.isLoading"
         />
       </a-form-item>
       <a-form-item
@@ -31,13 +32,19 @@
         name="uid"
         :rules="[{ required: true, message: 'UID is required!' }]"
       >
-        <a-input v-model:value="data.uid" placeholder="UID" type="number" />
+        <a-input
+          v-model:value="data.uid"
+          placeholder="UID"
+          type="number"
+          :disabled="data.isLoading"
+        />
       </a-form-item>
       <a-form-item label="Status" name="status">
         <a-switch
           v-model:checked="data.status"
           checked-children="ON"
           un-checked-children="OFF"
+          :disabled="data.isLoading"
         />
       </a-form-item>
     </a-form>
@@ -85,6 +92,7 @@ export default defineComponent({
       isLoading: false,
     });
     const emitCloseEvent = () => {
+      if (data.isLoading) return;
       formRef.value?.resetFields();
       ctx.emit("close");
     };

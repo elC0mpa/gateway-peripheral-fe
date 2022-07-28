@@ -24,6 +24,7 @@
           v-model:value="data.uniqueSerialNumber"
           placeholder="Serial Number"
           :allow-clear="true"
+          :disabled="data.isLoading"
         />
       </a-form-item>
       <a-form-item
@@ -35,6 +36,7 @@
           v-model:value="data.label"
           placeholder="Label"
           :allow-clear="true"
+          :disabled="data.isLoading"
         />
       </a-form-item>
       <a-form-item
@@ -49,6 +51,7 @@
           v-model:value="data.address"
           placeholder="IP Address"
           :allow-clear="true"
+          :disabled="data.isLoading"
         />
       </a-form-item>
     </a-form>
@@ -90,6 +93,7 @@ export default defineComponent({
       isLoading: false,
     });
     const emitCloseEvent = () => {
+      if (data.isLoading) return;
       formRef.value?.resetFields();
       ctx.emit("close");
     };
