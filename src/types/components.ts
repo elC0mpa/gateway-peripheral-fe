@@ -23,7 +23,7 @@ export type CreateGatewayModalType = {
 
 export type CreatePeripheralModalType = {
   vendor: string;
-  uid: number;
+  uid: string;
   status: boolean;
   isLoading: boolean;
 };

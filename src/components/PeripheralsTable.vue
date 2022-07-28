@@ -136,7 +136,7 @@ export default defineComponent({
       try {
         data.isLoading = true;
         await deletePeripheral(peripheral._id);
-        openNotificationWithIcon("success", "Gateway succesfully deleted");
+        openNotificationWithIcon("success", "Peripheral succesfully deleted");
         ctx.emit("refresh");
       } catch (error) {
         console.log("Error while deleting gateway: ", error);

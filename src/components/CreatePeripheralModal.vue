@@ -2,48 +2,69 @@
   <modal
     :visible="isVisible"
     :mask-closable="false"
-    :confirm-loading="isLoading"
+    :confirm-loading="data.isLoading"
     title="Create Peripheral"
     @cancel="emitCloseEvent"
-    @ok="onCreatePeripheral"
+    @ok="fieldsValidation"
   >
-    <a-input v-model:value="vendor" placeholder="Vendor" :allow-clear="true" />
-    <hr />
-    <div class="status-uid-container">
-      <div>
-        <span>UID:</span>
-        <a-input-number v-model:value="uid" />
-      </div>
-      <div>
-        <span>Status:</span>
+    <a-form
+      :model="data"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 16 }"
+      autocomplete="off"
+      name="form_in_modal"
+      ref="formRef"
+    >
+      <a-form-item
+        label="Vendor"
+        name="vendor"
+        :rules="[{ required: true, message: 'Vendor is required!' }]"
+      >
+        <a-input
+          v-model:value="data.vendor"
+          placeholder="Vendor"
+          :allow-clear="true"
+        />
+      </a-form-item>
+      <a-form-item
+        label="UID"
+        name="uid"
+        :rules="[{ required: true, message: 'UID is required!' }]"
+      >
+        <a-input v-model:value="data.uid" placeholder="UID" type="number" />
+      </a-form-item>
+      <a-form-item label="Status" name="status">
         <a-switch
-          v-model:checked="status"
+          v-model:checked="data.status"
           checked-children="ON"
           un-checked-children="OFF"
         />
-      </div>
-    </div>
+      </a-form-item>
+    </a-form>
   </modal>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { CreatePeripheralModalType } from "@/types/components";
 import { openNotificationWithIcon, getErrorMessage } from "@/composables/utils";
 import { createPeripheral } from "@/composables/api";
-import { Modal, Input, InputNumber, Switch } from "ant-design-vue";
+import { Modal, Input, Switch, Form, FormItem } from "ant-design-vue";
+import type { FormInstance } from "ant-design-vue";
 import "ant-design-vue/lib/modal/style/css";
 import "ant-design-vue/lib/input/style/css";
 import "ant-design-vue/lib/switch/style/css";
 import "ant-design-vue/lib/input-number/style/css";
+import "ant-design-vue/lib/form/style/css";
 
 export default defineComponent({
   name: "CreatePeripheralModal",
   components: {
     Modal,
     AInput: Input,
-    AInputNumber: InputNumber,
     ASwitch: Switch,
+    AForm: Form,
+    AFormItem: FormItem,
   },
   props: {
     isVisible: {
@@ -56,16 +77,15 @@ export default defineComponent({
     },
   },
   setup(props, ctx) {
+    const formRef = ref<FormInstance>();
     const data: CreatePeripheralModalType = reactive({
       vendor: "",
-      uid: NaN,
+      uid: "",
       status: false,
       isLoading: false,
     });
     const emitCloseEvent = () => {
-      data.vendor = "";
-      data.uid = NaN;
-      data.status = false;
+      formRef.value?.resetFields();
       ctx.emit("close");
     };
 
@@ -75,13 +95,11 @@ export default defineComponent({
         await createPeripheral(
           props.gatewayId,
           data.vendor,
-          data.uid,
+          Number(data.uid),
           data.status
         );
         openNotificationWithIcon("success", "Peripheral succesfully created");
-        data.vendor = "";
-        data.uid = NaN;
-        data.status = false;
+        formRef.value?.resetFields();
         ctx.emit("success");
       } catch (error) {
         const message = getErrorMessage(error);
@@ -94,21 +112,23 @@ export default defineComponent({
         data.isLoading = false;
       }
     };
+
+    const fieldsValidation = async () => {
+      try {
+        await formRef.value?.validateFields();
+        await onCreatePeripheral();
+      } catch (error) {
+        console.log("Validation error info: ", error);
+      }
+    };
     return {
       props,
       emitCloseEvent,
-      ...toRefs(data),
-      onCreatePeripheral,
+      data,
+      formRef,
+      fieldsValidation,
     };
   },
 });
 </script>
-
-<style>
-.status-uid-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-</style>
 
