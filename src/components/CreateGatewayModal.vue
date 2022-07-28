@@ -40,7 +40,10 @@
       <a-form-item
         label="IP Address"
         name="address"
-        :rules="[{ required: true, message: 'IP Address is required!' }]"
+        :rules="[
+          { required: true, message: 'IP Address is required!' },
+          { validator: ipAddressValidation },
+        ]"
       >
         <a-input
           v-model:value="data.address"
@@ -56,6 +59,7 @@
 import { defineComponent, reactive, ref } from "vue";
 import { CreateGatewayModalType } from "@/types/components";
 import { openNotificationWithIcon, getErrorMessage } from "@/composables/utils";
+import { ipAddressValidation } from "@/composables/validations";
 import { createGateway } from "@/composables/api";
 import { Modal, Input, Form, FormItem } from "ant-design-vue";
 import type { FormInstance } from "ant-design-vue";
@@ -122,6 +126,7 @@ export default defineComponent({
       data,
       fieldsValidation,
       formRef,
+      ipAddressValidation,
     };
   },
 });
