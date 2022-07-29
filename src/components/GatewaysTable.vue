@@ -14,7 +14,7 @@
     <template #expandIcon="{ expandable, expanded, record }">
       <a-button
         class="expand-row-button"
-        :class="{ 'not-expanded': !expanded }"
+        :class="{ 'pulsation-button': !expanded && !rowHasBeenExpanded }"
         type="primary"
         shape="circle"
         @click="toggleRow(expandable, expanded, record)"
@@ -125,6 +125,7 @@ export default defineComponent({
       createGatewayModalVisibility: false,
       peripheralsModalVisibility: false,
       expandedRows: [],
+      rowHasBeenExpanded: false,
     });
 
     const onDeleteGateway = async (gateway: Gateway) => {
@@ -162,6 +163,7 @@ export default defineComponent({
       record: Gateway
     ) => {
       if (!expandable) return;
+      data.rowHasBeenExpanded = true;
       if (!expanded) {
         data.expandedRows.push(record.serialNumber);
       } else {
@@ -187,8 +189,8 @@ export default defineComponent({
 
 <style lang="scss">
 .gateways-table {
-  button.expand-row-button.not-expanded {
-    animation: infinite-pulsation 2s 5;
+  button.pulsation-button {
+    animation: infinite-pulsation 1.5s 4;
   }
 }
 </style>

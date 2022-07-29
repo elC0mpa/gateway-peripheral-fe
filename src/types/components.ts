@@ -7,6 +7,7 @@ export type GatewaysTableDataType = {
   createGatewayModalVisibility: boolean;
   peripheralsModalVisibility: boolean;
   expandedRows: string[];
+  rowHasBeenExpanded: boolean;
 };
 
 export type PeipheralsTableDataType = {
