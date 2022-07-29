@@ -7,6 +7,7 @@
     :scroll="{
       x: 600,
     }"
+    class="peripherals-table"
   >
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'createdAt'">
@@ -156,4 +157,15 @@ export default defineComponent({
 });
 </script>
 
-
+<style lang="scss">
+.peripherals-table {
+  th.ant-table-cell {
+    background-color: aliceblue;
+  }
+  div.ant-table-container {
+    border-bottom: 7px solid aliceblue;
+    border-left: 7px solid aliceblue;
+    border-right: 7px solid aliceblue;
+  }
+}
+</style>
