@@ -12,6 +12,7 @@
   >
     <template #expandIcon="{ expandable, expanded, record }">
       <a-button
+        class="expand-row-button"
         type="primary"
         shape="circle"
         @click="toggleRow(expandable, expanded, record)"
@@ -31,6 +32,7 @@
           type="primary"
           shape="circle"
           @click="createGatewayModalVisibility = true"
+          class="create-gateway-button"
           ><template #icon><PlusOutlined /></template>
         </a-button>
         {{ column.title }}

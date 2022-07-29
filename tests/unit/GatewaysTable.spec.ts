@@ -60,9 +60,7 @@ describe("Testing GatewaysTable", () => {
     );
     expect(deleteButtons).toHaveLength(2);
 
-    const createButton = wrapper.findAll(
-      ".ant-btn.ant-btn-primary.ant-btn-circle.ant-btn-icon-only"
-    );
+    const createButton = wrapper.findAll(".create-gateway-button");
     expect(createButton).toHaveLength(1);
   });
 
@@ -76,7 +74,7 @@ describe("Testing GatewaysTable", () => {
     const rows = wrapper.findAll(".ant-table-row-level-0");
     const firstRowCells = rows[0].findAll(".ant-table-cell");
     const expandFirstRowButton = firstRowCells[0].get(
-      ".ant-table-row-expand-icon"
+      "button.expand-row-button"
     );
     await expandFirstRowButton.trigger("click");
     wrapper.getComponent(PeripheralsTable);
