@@ -9,10 +9,12 @@
     :scroll="{
       x: 600,
     }"
+    class="gateways-table"
   >
     <template #expandIcon="{ expandable, expanded, record }">
       <a-button
         class="expand-row-button"
+        :class="{ 'not-expanded': !expanded }"
         type="primary"
         shape="circle"
         @click="toggleRow(expandable, expanded, record)"
@@ -183,3 +185,10 @@ export default defineComponent({
 });
 </script>
 
+<style lang="scss">
+.gateways-table {
+  button.expand-row-button.not-expanded {
+    animation: infinite-pulsation 2s 5;
+  }
+}
+</style>
