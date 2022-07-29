@@ -4,11 +4,20 @@
     :data-source="gateways"
     :pagination="false"
     :loading="isLoading"
+    :expanded-row-keys="expandedRows"
     rowKey="serialNumber"
     :scroll="{
       x: 600,
     }"
   >
+    <template #expandIcon="{ expandable, expanded, record }">
+      <a-button
+        type="primary"
+        shape="circle"
+        @click="toggleRow(expandable, expanded, record)"
+        ><template #icon><ClusterOutlined /></template>
+      </a-button>
+    </template>
     <template #expandedRowRender="{ record }">
       <peripherals-table
         :gatewayId="record._id"
@@ -64,7 +73,11 @@ import CreateGatewayModal from "./CreateGatewayModal.vue";
 import PeripheralsTable from "./PeripheralsTable.vue";
 
 import { Table, Popconfirm, Button } from "ant-design-vue";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons-vue";
+import {
+  DeleteOutlined,
+  PlusOutlined,
+  ClusterOutlined,
+} from "@ant-design/icons-vue";
 import "ant-design-vue/lib/table/style/css";
 import "ant-design-vue/lib/popconfirm/style/css";
 
@@ -78,6 +91,7 @@ export default defineComponent({
     PeripheralsTable,
     CreateGatewayModal,
     PlusOutlined,
+    ClusterOutlined,
   },
   setup() {
     const data: GatewaysTableDataType = reactive({
@@ -106,6 +120,7 @@ export default defineComponent({
       isLoading: true,
       createGatewayModalVisibility: false,
       peripheralsModalVisibility: false,
+      expandedRows: [],
     });
 
     const onDeleteGateway = async (gateway: Gateway) => {
@@ -137,6 +152,22 @@ export default defineComponent({
       await refreshGateways();
     };
 
+    const toggleRow = (
+      expandable: boolean,
+      expanded: boolean,
+      record: Gateway
+    ) => {
+      if (!expandable) return;
+      if (!expanded) {
+        data.expandedRows.push(record.serialNumber);
+      } else {
+        data.expandedRows.splice(
+          data.expandedRows.indexOf(record.serialNumber),
+          1
+        );
+      }
+    };
+
     refreshGateways();
 
     return {
@@ -144,6 +175,7 @@ export default defineComponent({
       onDeleteGateway,
       gatewayCreated,
       refreshGateways,
+      toggleRow,
     };
   },
 });

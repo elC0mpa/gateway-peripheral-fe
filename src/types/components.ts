@@ -1,4 +1,4 @@
-import { Gateway, Peripheral } from "@/types";
+import { Gateway } from "@/types";
 
 export type GatewaysTableDataType = {
   columns: any[];
@@ -6,6 +6,7 @@ export type GatewaysTableDataType = {
   isLoading: boolean;
   createGatewayModalVisibility: boolean;
   peripheralsModalVisibility: boolean;
+  expandedRows: string[];
 };
 
 export type PeipheralsTableDataType = {
