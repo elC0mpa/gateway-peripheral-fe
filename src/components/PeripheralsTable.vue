@@ -162,10 +162,8 @@ export default defineComponent({
   th.ant-table-cell {
     background-color: aliceblue;
   }
-  div.ant-table-container {
+  table {
     border-bottom: 7px solid aliceblue;
-    border-left: 7px solid aliceblue;
-    border-right: 7px solid aliceblue;
   }
 }
 </style>
