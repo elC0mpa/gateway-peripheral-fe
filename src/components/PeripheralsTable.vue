@@ -27,9 +27,10 @@
       <template v-if="column.key === 'status'">
         <a-switch
           v-model:checked="record.status"
+          :loading="updatingStatusIDs.includes(record._id)"
           checked-children="ON"
           un-checked-children="OFF"
-          :disabled="true"
+          @change="onUpdatePeripheralStatus(record)"
         />
       </template>
     </template>
@@ -61,7 +62,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "vue";
-import { deletePeripheral } from "../composables/api";
+import { deletePeripheral, updatePeripheralStatus } from "../composables/api";
 import { formatDate } from "@/composables/utils";
 import { PeipheralsTableDataType } from "@/types/components";
 import { openNotificationWithIcon } from "@/composables/utils";
@@ -126,6 +127,7 @@ export default defineComponent({
       ],
       isLoading: false,
       createPeripheralModalVisibility: false,
+      updatingStatusIDs: [],
     });
 
     const peripheralCreated = async () => {
@@ -146,12 +148,30 @@ export default defineComponent({
       }
     };
 
+    const onUpdatePeripheralStatus = async (peripheral: Peripheral) => {
+      try {
+        data.updatingStatusIDs.push(peripheral._id);
+        await updatePeripheralStatus(peripheral._id, peripheral.status);
+        openNotificationWithIcon(
+          "success",
+          "Peripheral status succesfully updated"
+        );
+        ctx.emit("refresh");
+      } catch {
+        console.log("Error while updating status");
+      } finally {
+        const index = data.updatingStatusIDs.indexOf(peripheral._id);
+        data.updatingStatusIDs.splice(index, 1);
+      }
+    };
+
     return {
       ...toRefs(data),
       props,
       peripheralCreated,
       onDeletePeripheral,
       formatDate,
+      onUpdatePeripheralStatus,
     };
   },
 });

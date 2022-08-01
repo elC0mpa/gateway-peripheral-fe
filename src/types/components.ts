@@ -14,6 +14,7 @@ export type PeipheralsTableDataType = {
   columns: any[];
   isLoading: boolean;
   createPeripheralModalVisibility: boolean;
+  updatingStatusIDs: string[];
 };
 
 export type CreateGatewayModalType = {

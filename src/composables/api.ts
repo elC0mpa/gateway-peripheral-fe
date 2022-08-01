@@ -132,3 +132,27 @@ export const createPeripheral = (
       });
   });
 };
+
+export const updatePeripheralStatus = (
+  id: string,
+  status: boolean
+): Promise<Peripheral> => {
+  return new Promise((resolve, reject) => {
+    instance
+      .patch(`peripheral/${id}`, {
+        status,
+      })
+      .then((response) => {
+        const { data } = response;
+        const { items } = data;
+        resolve(items);
+      })
+      .catch((error) => {
+        if (error.response) {
+          reject(error.response.data);
+        } else if (error.request) {
+          reject(error.request);
+        }
+      });
+  });
+};
