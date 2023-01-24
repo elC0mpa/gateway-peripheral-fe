@@ -135,7 +135,7 @@ export default defineComponent({
         openNotificationWithIcon("success", "Gateway succesfully deleted");
         await refreshGateways();
       } catch (error) {
-        console.log("Error while deleting gateway: ", error);
+        console.error("Error while deleting gateway: ", error);
       } finally {
         data.isLoading = false;
       }
@@ -146,7 +146,7 @@ export default defineComponent({
         data.isLoading = true;
         data.gateways = await getGateways();
       } catch (error) {
-        console.log("Error while getting gateways");
+        console.error("Error while getting gateways");
       } finally {
         data.isLoading = false;
       }
